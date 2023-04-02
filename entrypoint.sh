@@ -5,6 +5,7 @@ keystore_path=$INPUT_KEYSTORE_PATH
 keystore_password=$INPUT_KEYSTORE_PASSWORD
 keystore_alias=$INPUT_KEYSTORE_ALIAS
 keystore_alias_password=$INPUT_KEYSTORE_ALIAS_PASSWORD
+bundletool_version=$INPUT_BUNDLETOOL_VERSION
 
 if [ ! -f "$aab_path" ]; then
     echo "aab file: \"$aab_path\" not found!"
@@ -21,9 +22,14 @@ if [ -z $keystore_password ] || [ -z $keystore_alias ] || [ -z $keystore_alias ]
     exit 1
 fi
 
+if [ -z bundletool_version ]; then
+    echo "auto update bundletool version to 1.14.0"
+    bundletool_version = "1.14.0"
+fi
+
 echo "Downloading Bundletool..."
 bundletool="bundletool.jar"
-bundletoolUrl="https://github.com/google/bundletool/releases/download/1.11.0/bundletool-all-1.11.0.jar"
+bundletoolUrl="https://github.com/google/bundletool/releases/download/$bundletool_version/bundletool-all-$bundletool_version.jar"
 
 exec wget -nv --quiet "${bundletoolUrl}" --output-document="${bundletool}" &
 wait
@@ -40,7 +46,7 @@ mkdir -p ${output_dir}
 echo "Building universal APK. AAB file path: ${aab_path}"
 
 apks_output="${output_dir}/apks.apks"
-exec java -jar "${bundletool}" build-apks --bundle="${aab_path}" --output=${apks_output} --mode=universal #--ks=${keystore_path} --ks-pass=pass:"${keystore_password}" --ks-key-alias="${keystore_alias}" --key-pass=pass:"${keystore_alias_password}" &
+exec java -jar "${bundletool}" build-apks --bundle="${aab_path}" --output=${apks_output} --mode=universal --ks=${keystore_path} --ks-pass=pass:"${keystore_password}" --ks-key-alias="${keystore_alias}" --key-pass=pass:"${keystore_alias_password}" &
 wait
 
 echo "Unziping *.apks file: ${apks_output}"

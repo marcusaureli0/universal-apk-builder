@@ -27,6 +27,7 @@ jobs:
           keystore_password: "android"
           keystore_alias: "androiddebugkey"
           keystore_alias_password: "android"
+          bundletool_version: "1.14.0"
       - name: "Check APK patch exists"
         if: ${{ env.UNIVERSAL_APK_PATH != 'output/universal.apk' }} 
         run: |
