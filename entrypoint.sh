@@ -46,7 +46,7 @@ mkdir -p ${output_dir}
 echo "Building universal APK. AAB file path: ${aab_path}"
 
 apks_output="${output_dir}/apks.apks"
-exec java -jar "${bundletool}" build-apks --bundle="${aab_path}" --output=${apks_output} --mode=universal --ks=${keystore_path} --ks-pass=pass:"${keystore_password}" --ks-key-alias="${keystore_alias}" --key-pass=pass:"${keystore_alias_password}" &
+exec java -jar "${bundletool}" build-apks --bundle="${aab_path}" --output=${apks_output} --mode=universal  & #--ks=${keystore_path} --ks-pass=pass:"${keystore_password}" --ks-key-alias="${keystore_alias}" --key-pass=pass:"${keystore_alias_password}" &
 wait
 
 echo "Unziping *.apks file: ${apks_output}"
